@@ -2,8 +2,8 @@
 def load_words():
     with open('words_alpha.txt') as word_file:
         valid_words = set(word_file.read().split())
-
     return valid_words
+
 
 
 class Rotating_CC:
@@ -13,22 +13,27 @@ class Rotating_CC:
     
     def RCC_encrypt(self, msg, shift):
         return self.RCC(msg, shift)
-
-    def RCC_decrypt(self, msg):
-        #select the longest word
-        text = sorted(msg.split(), key=len)
-        testWord = text[-1]
-        n = 1
-        while n<26:
-            translated = self.RCC(testWord, n)
-            if translated in self.EnglishWords:
-                new_msg =  self.RCC(msg, n)
-                return
-            else:
-                n+=1
-        return new_msg
-      
     
+
+    def RCC_decrypt(self, msg, shift=1):
+        if shift > 26:
+            return None
+        new_msg = self.RCC(msg, -shift)
+        if self.test_accuracy(new_msg) > .75:
+            return new_msg
+        return self.RCC_decrypt(msg, shift+1)
+                
+                
+    def test_accuracy(self, msg):
+        msg_words = re.findall(r'\w+', msg)
+        whole = len(msg_words)
+        part = 0
+        for word in msg_words:
+            if word in self.EnglishWords:
+                part +=1
+        return part/whole
+        
+      
     def RCC (self, msg, shift):
         new_msg = ""
         new_shift = shift
@@ -42,5 +47,4 @@ class Rotating_CC:
                 ch = self.ALPHA_lower[(i + new_shift)%26]
                 new_shift+=shift
             new_msg += ch
-                
-        return new_msg
+         return new_msg
