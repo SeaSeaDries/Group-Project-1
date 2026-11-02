@@ -1,14 +1,49 @@
-name = "Leigha VanOrsdol"
-
-message_file = input("What is the message file name? (file_name.txt) ")
-
-with open(message_file, "a") as file:
-    print("Got it!")
+import os
+from Decrypt import Rotating_CC
     
-with open(message_file, "r") as file:
-    print(file.read())
+class Message:
     
-message = input("What would you like to say? ")
-
-with open(message_file, "a") as file:
-    file.write(f"[{name}]: {message} \n")
+    def __init__(self):
+        self.cipher = Rotating_CC()
+        
+        
+    def get_chat_name(self):
+        self.user = input("Username: ")
+        recipient = input("Chat with: ")
+        chat_name = [self.user, recipient]
+        chat_name.sort()
+        chat_file = f"[{chat_name[0]}]-[{chat_name[1]}].txt"
+        return chat_file
+        
+    
+    def write_msg(self):
+        chat_file  = self.get_chat_name()
+        
+        if os.path.exists(chat_file):
+            chat_history = self.read_msg(chat_file)
+        else:
+            chat_history = ""
+        
+        msg = input("Message: ")
+        
+        if chat_history:
+            chat_history += f"\n[{self.user}]: {msg}"
+        else:
+            chat_history += f"[{self.user}]: {msg}"
+        
+        with open(chat_file, "w") as file:
+            updated_chat = self.cipher.RCC_encrypt(chat_history)
+            file.write(updated_chat)
+            
+            
+            
+    def read_msg(self, chat_file):
+        if os.path.exists(chat_file):
+            with open(chat_file, "r") as file:
+                encrypted = file.read()
+                decrypted = self.cipher.RCC_decrypt(encrypted)
+                return decrypted
+        else:
+            print("No chat history found.")
+            return ''
+   
