@@ -29,7 +29,7 @@ class Rotating_CC:
                 
     def test_accuracy(self, msg):
         msg = msg.lower()
-        msg_words = re.findall(r'\w+', msg)
+        msg_words = re.findall(r'[a-zA-Z]+', msg)
         whole = len(msg_words)
         part = 0
         for word in msg_words:
