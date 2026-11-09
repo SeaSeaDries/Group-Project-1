@@ -1,4 +1,7 @@
 #getting the english words
+import re
+
+
 def load_words():
     with open('words_alpha.txt') as word_file:
         valid_words = set(word_file.read().split())
@@ -25,6 +28,7 @@ class Rotating_CC:
                 
                 
     def test_accuracy(self, msg):
+        msg = msg.lower()
         msg_words = re.findall(r'\w+', msg)
         whole = len(msg_words)
         part = 0
@@ -47,4 +51,4 @@ class Rotating_CC:
                 ch = self.ALPHA_lower[(i + new_shift)%26]
                 new_shift+=shift
             new_msg += ch
-         return new_msg
+        return new_msg
