@@ -1,5 +1,6 @@
 import os
 from Decrypt import Rotating_CC
+from random import randint
     
 class Message:
     
@@ -21,18 +22,19 @@ class Message:
         
         if os.path.exists(chat_file):
             chat_history = self.read_msg(chat_file)
+            print(chat_history)
         else:
             chat_history = ""
         
         msg = input("Message: ")
         
         if chat_history:
-            chat_history += f"\n[{self.user}]: {msg}"
+            chat_history = chat_history + f"\n[{self.user}]: {msg}"
         else:
-            chat_history += f"[{self.user}]: {msg}"
+            chat_history = f"[{self.user}]: {msg}"
         
         with open(chat_file, "w") as file:
-            updated_chat = self.cipher.RCC_encrypt(chat_history)
+            updated_chat = self.cipher.RCC_encrypt(chat_history, randint(1, 25))
             file.write(updated_chat)
             
             
@@ -46,4 +48,3 @@ class Message:
         else:
             print("No chat history found.")
             return ''
-   

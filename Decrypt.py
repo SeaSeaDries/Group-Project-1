@@ -2,6 +2,7 @@
 import re
 
 
+
 def load_words():
     with open('words_alpha.txt') as word_file:
         valid_words = set(word_file.read().split())
@@ -30,7 +31,10 @@ class Rotating_CC:
     def test_accuracy(self, msg):
         msg = msg.lower()
         msg_words = re.findall(r'[a-zA-Z]+', msg)
-        whole = len(msg_words)
+        if len(msg_words) > 0:
+            whole = len(msg_words)
+        else:
+            whole = 1
         part = 0
         for word in msg_words:
             if word in self.EnglishWords:
